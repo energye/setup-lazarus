@@ -1,6 +1,6 @@
-name: 'Setup Lazarus environment'
+name: 'Set Lazarus environment for building energy lib'
 
-description: 'Setup a Lazarus environment adding it to the PATH'
+description: 'Create a Lazarus environment on Windows i386,x64(amd), Linux x64(arm,amd), and MacOS x64(arm, amd)'
 
 branding:
   icon: 'chevrons-right'
