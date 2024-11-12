@@ -229,14 +229,14 @@ const pkgs = {
     },
     linux: {
         "3.6": {
-            laz: "lazarus-project_3.6.0-0_amd64.deb",
-            fpc: "fpc-laz_3.2.2-210709_amd64.deb",
-            fpcsrc: "fpc-src_3.2.2-210709_amd64.deb",
+            "laz": "lazarus-project_3.6.0-0_amd64.deb",
+            "fpc": "fpc-laz_3.2.2-210709_amd64.deb",
+            "fpcsrc": "fpc-src_3.2.2-210709_amd64.deb",
         },
         "3.4": {
-            laz: "lazarus-project_3.4.0-0_amd64.deb",
-            fpc: "fpc-laz_3.2.2-210709_amd64.deb",
-            fpcsrc: "fpc-src_3.2.2-210709_amd64.deb",
+            "laz": "lazarus-project_3.4.0-0_amd64.deb",
+            "fpc": "fpc-laz_3.2.2-210709_amd64.deb",
+            "fpcsrc": "fpc-src_3.2.2-210709_amd64.deb",
         },
         "3.2": {
             "laz": "lazarus-project_3.2.0-0_amd64.deb",
