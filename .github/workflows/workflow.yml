@@ -1,0 +1,29 @@
+name: build
+
+on:
+  pull_request:
+  push:
+    paths-ignore:
+    - "README.md"
+    branches:
+      - main
+      - releases/*
+
+jobs:
+  build:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Setup node 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - run: npm ci
+
+      - run: npm run build

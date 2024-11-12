@@ -1,0 +1,30 @@
+name: 'Lazarus Build Environment'
+
+description: 'Install Lazarus and Setup a Lazarus environment adding it to the PATH'
+
+branding:
+  icon: 'chevrons-right'
+  color: 'blue'
+
+inputs:
+  lazarus-version:
+    description: 'Version of Lazarus'
+    required: true
+    default: '3.2'
+  include-packages:
+    description: 'Include packages that the project needs'
+    required: false
+  with-cache:
+    description: 'Use cache for installer files'
+    required: false
+    default: true
+  os-arch:
+    description: 'Installing 32-bit Lazarus on Windows 64'
+    required: false
+    default: 'x64'
+
+runs:
+  using: 'node16'
+  main: 'dist/main/index.js'
+  post: 'dist/post/index.js'
+
