@@ -587,33 +587,35 @@ export class Lazarus {
     }
 
     private _getPackageURL(pkg: string): string {
-        let result: string = "";
+        let result: string = '';
         // Replace periods with undescores due to JSON borking with periods or dashes
-        let lazVer = "v" + this._LazarusVersion.replace(/\./gi, "_");
         switch (this._Platform) {
             case "win32":
-                if (this._Arch == "x64") {
+                if (this._Arch == 'x64') {
+                    // win64
                     result = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2064%20bits/Lazarus%20${this._LazarusVersion}/`;
-                    result += pkgs["win64"][lazVer];
+                    result += pkgs['win64'][this._LazarusVersion];
                 } else {
+                    // win32
                     result = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2032%20bits/Lazarus%20${this._LazarusVersion}/`;
-                    result += pkgs[this._Platform][lazVer];
+                    result += pkgs[this._Platform][this._LazarusVersion];
                 }
                 break;
             case "linux":
                 result = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%20${this._LazarusVersion}/`;
-                result += pkgs[this._Platform][lazVer][pkg];
+                result += pkgs[this._Platform][this._LazarusVersion][pkg];
                 break;
             case "darwin":
                 result = `https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%20${this._LazarusVersion}/`;
-                result += pkgs[this._Platform][lazVer][pkg];
+                // pkgs[darwin][version][fileName]
+                result += pkgs[this._Platform][this._LazarusVersion][pkg];
                 break;
             default:
                 throw new Error(`getPackageName - Platform not implemented yet ${this._Platform}`);
         }
-
         return result;
     }
+
 
     private _getTempDirectory(): string {
         let tempDirectory = process.env["RUNNER_TEMP"] || "";
