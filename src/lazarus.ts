@@ -11,7 +11,7 @@ import {Cache} from "./cache";
 const StableVersion = "3.6";
 
 const pkgs: object = {
-    win32: {
+    "win32": {
         "3.6": "lazarus-3.6-fpc-3.2.2-win32.exe",
         "3.4": "lazarus-3.4-fpc-3.2.2-win32.exe",
         "3.2": "lazarus-3.2-fpc-3.2.2-win32.exe",
@@ -20,7 +20,7 @@ const pkgs: object = {
         "2.2.4": "lazarus-2.2.4-fpc-3.2.2-win32.exe",
         "2.2.2": "lazarus-2.2.2-fpc-3.2.2-win32.exe"
     },
-    win64: {
+    "win64": {
         "3.6": "lazarus-3.6-fpc-3.2.2-win64.exe",
         "3.4": "lazarus-3.4-fpc-3.2.2-win64.exe",
         "3.2": "lazarus-3.2-fpc-3.2.2-win64.exe",
@@ -29,7 +29,7 @@ const pkgs: object = {
         "2.2.4": "lazarus-2.2.4-fpc-3.2.2-win64.exe",
         "2.2.2": "lazarus-2.2.2-fpc-3.2.2-win64.exe"
     },
-    linux: {
+    "linux": {
         "3.6": {
             "laz": "lazarus-project_3.6.0-0_amd64.deb",
             "fpc": "fpc-laz_3.2.2-210709_amd64.deb",
@@ -110,7 +110,7 @@ const pkgs: object = {
             "fpcsrc": "fpc-3.2.2.source.tar.gz"
         }
     },
-    darwin: {
+    "darwin": {
         "3.6": {
             "laz": "Lazarus-3.6-macosx-x86_64.pkg",
             "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
@@ -587,14 +587,14 @@ export class Lazarus {
     }
 
     private _getPackageURL(pkg: string): string {
-        let result: string = '';
+        let result: string = "";
         // Replace periods with undescores due to JSON borking with periods or dashes
         switch (this._Platform) {
             case "win32":
-                if (this._Arch == 'x64') {
+                if (this._Arch == "x64") {
                     // win64
                     result = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2064%20bits/Lazarus%20${this._LazarusVersion}/`;
-                    result += pkgs['win64'][this._LazarusVersion];
+                    result += pkgs["win64"][this._LazarusVersion];
                 } else {
                     // win32
                     result = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2032%20bits/Lazarus%20${this._LazarusVersion}/`;
