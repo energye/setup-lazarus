@@ -23,12 +23,9 @@ export class Packages {
         this.packageData = await this.getPackageList(`${this.baseUrl}/${this.jsonParam}`);
         core.info(`Fetched ${this.packageData.length} package items.`);
 
-        const pkgsToInstall: PackageData[] = await this.resolveDependencies(
-            includePackages
-        );
+        const pkgsToInstall: PackageData[] = await this.resolveDependencies(includePackages);
 
-        core.info(`Installing packages: ${pkgsToInstall.map((pkg) => pkg.displayName).join(", ")}`
-        );
+        core.info(`Installing packages: ${pkgsToInstall.map((pkg) => pkg.DisplayName).join(", ")}`);
         await this.installAllPackages(pkgsToInstall);
     }
 
@@ -37,9 +34,7 @@ export class Packages {
         const pkgsToInstallNames: Set<string> = new Set();
 
         for (const requestedPkg of includePackages) {
-            const matchedPackages = this.packageData.filter(
-                (pkg) => pkg.displayName === requestedPkg.trim()
-            );
+            const matchedPackages = this.packageData.filter((pkg) => pkg.DisplayName === requestedPkg.trim());
 
             for (const pkg of matchedPackages) {
                 const deps = await this.getDependencies(pkg);
@@ -57,25 +52,22 @@ export class Packages {
         pkgList: PackageData[],
         pkgNames: Set<string>
     ): void {
-        if (!pkgNames.has(pkg.displayName)) {
+        if (!pkgNames.has(pkg.DisplayName)) {
             pkgList.push(pkg);
-            pkgNames.add(pkg.displayName);
+            pkgNames.add(pkg.DisplayName);
         }
     }
 
-    private async getDependencies(
-        pkg: PackageData,
-        seenPkgs: Set<string> = new Set()
-    ): Promise<PackageData[]> {
-        if (seenPkgs.has(pkg.name)) return [];
-        seenPkgs.add(pkg.name);
+    private async getDependencies(pkg: PackageData, seenPkgs: Set<string> = new Set()): Promise<PackageData[]> {
+        if (seenPkgs.has(pkg.Name)) return [];
+        seenPkgs.add(pkg.Name);
 
         const dependencies: PackageData[] = [];
         for (const file of pkg.packages) {
-            const depNames = file.dependenciesStr.split(",").map((dep) => dep.trim());
+            const depNames = file.DependenciesAsString.split(",").map((dep) => dep.trim());
             for (const depName of depNames) {
                 const foundPkgs = this.packageData.filter(
-                    (p) => p.containsPackage(depName) && p.name !== pkg.name
+                    (p) => p.containsPackage(depName) && p.Name !== pkg.Name
                 );
                 for (const foundPkg of foundPkgs) {
                     dependencies.push(
@@ -88,16 +80,11 @@ export class Packages {
         return dependencies;
     }
 
-    private async installAllPackages(
-        pkgsToInstall: PackageData[]
-    ): Promise<void> {
+    private async installAllPackages(pkgsToInstall: PackageData[]): Promise<void> {
         for (const pkg of pkgsToInstall) {
             try {
-                const pkgFile = await this.download(pkg.repositoryFileName);
-                const pkgFolder = await this.extract(
-                    pkgFile,
-                    path.join(this.getTempDirectory(), pkg.repositoryFileHash)
-                );
+                const pkgFile = await this.download(pkg.RepositoryFileName);
+                const pkgFolder = await this.extract(pkgFile, path.join(this.getTempDirectory(), pkg.RepositoryFileHash));
                 core.info(`Unzipped to: "${pkgFolder}/${pkg.baseDir}"`);
                 await exec(`rm -rf ${pkgFile}`);
                 await this.clearDirectory(pkgFolder);
@@ -114,12 +101,7 @@ export class Packages {
         pkg: PackageData
     ): Promise<void> {
         for (const pkgFile of pkg.packages) {
-            const pkgPath = path.join(
-                pkgFolder,
-                pkg.baseDir,
-                pkgFile.relativeFilePath,
-                pkgFile.file
-            );
+            const pkgPath = path.join(pkgFolder, pkg.baseDir, pkgFile.RelativeFilePath, pkgFile.PackageFile);
             const buildCommand = `lazbuild ${this.getPlatformFlags()} "${pkgPath}"`;
 
             core.info(`Adding and compiling package: ${pkgPath}`);
@@ -163,7 +145,7 @@ export class Packages {
         }
     }
 
-    private async getPackageList(repoURL: string): Promise<PackageData[]> {
+    public async getPackageList(repoURL: string): Promise<PackageData[]> {
         core.info(`Fetching package list from ${repoURL}`);
         try {
             const httpClient = new http.HttpClient();
@@ -171,13 +153,11 @@ export class Packages {
             const responseBody = await response.readBody();
             return this.parsePackageList(JSON.parse(responseBody));
         } catch (error) {
-            throw new Error(
-                `Failed to get package list: ${(error as Error).message}`
-            );
+            throw new Error(`Failed to get package list: ${(error as Error).message}`);
         }
     }
 
-    private parsePackageList(packageList: any): PackageData[] {
+    public parsePackageList(packageList: any): PackageData[] {
         const result: PackageData[] = [];
         Object.entries(packageList).forEach(([key, value]) => {
             if (key.startsWith("PackageData")) {
@@ -204,10 +184,10 @@ export class Packages {
 }
 
 class PackageData {
-    name: string = "";
-    displayName: string = "";
-    repositoryFileName: string = "";
-    repositoryFileHash: string = "";
+    Name: string = "";
+    DisplayName: string = "";
+    RepositoryFileName: string = "";
+    RepositoryFileHash: string = "";
     private pkgBaseDir: string = "";
     packages: PackageFile[] = [];
 
@@ -221,23 +201,23 @@ class PackageData {
 
     public containsPackage(needle: string): boolean {
         const [name] = needle.includes("(") ? needle.split("(") : [needle];
-        return this.packages.some((pkg) => pkg.file === `${name.trim()}.lpk`);
+        return this.packages.some((pkg) => pkg.PackageFile === `${name.trim()}.lpk`);
     }
 }
 
 class PackageFile {
-    file: string = "";
-    private _relativeFilePath: string = "";
-    lazarusCompatibility: string[] = [];
-    freePascalCompatibility: string[] = [];
-    dependenciesStr: string = "";
-    type: number = -1;
+    PackageFile: string = "";
+    private _RelativeFilePath: string = "";
+    LazCompatibility: string[] = [];
+    FPCCompatability: string[] = [];
+    DependenciesAsString: string = "";
+    PackageType: number = -1;
 
-    get relativeFilePath(): string {
-        return this._relativeFilePath;
+    get RelativeFilePath(): string {
+        return this._RelativeFilePath;
     }
 
-    set relativeFilePath(value: string) {
-        this._relativeFilePath = value.replace(/\\/gi, "");
+    set RelativeFilePath(value: string) {
+        this._RelativeFilePath = value.replace(/\\/gi, "");
     }
 }
