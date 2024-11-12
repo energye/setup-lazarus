@@ -1,10 +1,10 @@
 import * as core from '@actions/core';
-import * as inst from './Installer';
+import * as inst from './installer';
 
 async function run(): Promise<void> {
     try {
         // `lazarus-version` input defined in action metadata file
-        let lazarusVersion = core.getInput('lazarus-version') || '2.2.6';
+        let lazarusVersion = core.getInput('lazarus-version');
 
         // `include-packages` input defined in action metadata file
         let includePackages = core.getInput('include-packages');

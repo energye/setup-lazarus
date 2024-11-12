@@ -1,6 +1,6 @@
-name: 'Lazarus Build Environment'
+name: 'Setup Lazarus environment'
 
-description: 'Install Lazarus and Setup a Lazarus environment adding it to the PATH'
+description: 'Setup a Lazarus environment adding it to the PATH'
 
 branding:
   icon: 'chevrons-right'
@@ -10,21 +10,20 @@ inputs:
   lazarus-version:
     description: 'Version of Lazarus'
     required: true
-    default: '3.2'
+    default: 'dist'
   include-packages:
     description: 'Include packages that the project needs'
     required: false
   with-cache:
     description: 'Use cache for installer files'
     required: false
-    default: true
+    default: "false"
   os-arch:
     description: 'Installing 32-bit Lazarus on Windows 64'
     required: false
     default: 'x64'
 
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/main/index.js'
   post: 'dist/post/index.js'
-

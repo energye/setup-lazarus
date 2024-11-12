@@ -1,15 +1,14 @@
 {
-  "name": "lazarus",
-  "version": "1.0.17",
+  "name": "setup-lazarus",
+  "version": "3.3.0",
   "description": "Set up your GitHub Actions workflow with a specific version of Lazarus",
   "main": "lib/main.js",
   "scripts": {
-    "build": "tsc && ncc build -o dist/main lib/main.js && ncc build -o dist/post lib/post.js",
-    "dev": "npm run build && node lib/main.js"
+    "build": "tsc && ncc build -o dist/main lib/main.js && ncc build -o dist/post lib/post.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/energye/setup-lazarus.git"
+    "url": "git+https://github.com/gcarreno/setup-lazarus.git"
   },
   "keywords": [
     "actions",
@@ -19,20 +18,20 @@
   "author": "Gustavo Carreno <guscarreno@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/energye/setup-lazarus/issues"
+    "url": "https://github.com/gcarreno/setup-lazarus/issues"
   },
-  "homepage": "https://github.com/energye/setup-lazarus#readme",
+  "homepage": "https://github.com/gcarreno/setup-lazarus#readme",
   "dependencies": {
-    "@actions/cache": "^2.0.5",
-    "@actions/core": "^1.9.1",
+    "@actions/cache": "^3.3.0",
+    "@actions/core": "^1.11.1",
     "@actions/exec": "^1.0.4",
-    "@actions/github": "^2.2.0",
-    "@actions/http-client": "=1.0.8",
+    "@actions/github": "^6.0.0",
+    "@actions/http-client": "^2.2.3",
     "@actions/io": "^1.0.2",
-    "@actions/tool-cache": "^1.6.1"
+    "@actions/tool-cache": "^2.0.1"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.36.1",
-    "typescript": "^4.9.5"
+    "@vercel/ncc": "^0.38.2",
+    "typescript": "^5.6.3"
   }
 }

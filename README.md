@@ -3,7 +3,8 @@
 [![Actions Status](https://github.com/energye/setup-lazarus/workflows/build/badge.svg)](https://github.com/energye/setup-lazarus/actions)
 
 Originating from [setup-lazarus](https://github.com/gcarreno/setup-lazarus)
-- Added Linux aarch64 architecture
+
+Added Linux aarch64 architecture
 
 Set up your GitHub Actions workflow with a specific version of Lazarus
 
@@ -17,10 +18,17 @@ Set up your GitHub Actions workflow with a specific version of Lazarus
 
 Possible values:
 
-* `stable` - Installs the latest stable version: 2.2.6
-* `2.2.6`  - comes with `FPC v3.2.2`
-* `2.2.4`  - comes with `FPC v3.2.2`
-* `2.2.2`  - comes with `FPC v3.2.2`
+| Lazarus Version | FPC Version | Description   |
+|-----------------|-------------|---------------|
+| dist            |             | Latest stable |
+| stable          |             | Lazarus 3.6   |
+| 3.6             | 3.2.2       |               |
+| 3.2             | 3.2.2       |               |
+| 3.4             | 3.2.2       |               |
+| 3.0             | 3.2.2       |               |
+| 2.2.6           | 3.2.2       |               |
+| 2.2.4           | 3.2.2       |               |
+| 2.2.2           | 3.2.2       |               |
 
 ### include-packages
 
