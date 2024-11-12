@@ -165,7 +165,7 @@ export class Lazarus {
     }
 
     async installLazarus(): Promise<void> {
-        core.info(`installLazarus -- Installing Lazarus ${this._LazarusVersion} on platform: "${this._Platform}"; arch: "${this._Arch}"`);
+        core.info(`Installing Lazarus: ${this._LazarusVersion} Platform: "${this._Platform}" ARCH: "${this._Arch}"`);
         switch (this._LazarusVersion) {
             // Special case named version that installs the repository pakages on Ubuntu
             // but installs stable version under Windows

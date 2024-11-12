@@ -209,7 +209,7 @@ const fs = __importStar(__nccwpck_require__(9896));
 const cache_1 = __nccwpck_require__(5914);
 const StableVersion = "3.6";
 const pkgs = {
-    win32: {
+    "win32": {
         "3.6": "lazarus-3.6-fpc-3.2.2-win32.exe",
         "3.4": "lazarus-3.4-fpc-3.2.2-win32.exe",
         "3.2": "lazarus-3.2-fpc-3.2.2-win32.exe",
@@ -218,7 +218,7 @@ const pkgs = {
         "2.2.4": "lazarus-2.2.4-fpc-3.2.2-win32.exe",
         "2.2.2": "lazarus-2.2.2-fpc-3.2.2-win32.exe"
     },
-    win64: {
+    "win64": {
         "3.6": "lazarus-3.6-fpc-3.2.2-win64.exe",
         "3.4": "lazarus-3.4-fpc-3.2.2-win64.exe",
         "3.2": "lazarus-3.2-fpc-3.2.2-win64.exe",
@@ -227,7 +227,7 @@ const pkgs = {
         "2.2.4": "lazarus-2.2.4-fpc-3.2.2-win64.exe",
         "2.2.2": "lazarus-2.2.2-fpc-3.2.2-win64.exe"
     },
-    linux: {
+    "linux": {
         "3.6": {
             "laz": "lazarus-project_3.6.0-0_amd64.deb",
             "fpc": "fpc-laz_3.2.2-210709_amd64.deb",
@@ -308,7 +308,7 @@ const pkgs = {
             "fpcsrc": "fpc-3.2.2.source.tar.gz"
         }
     },
-    darwin: {
+    "darwin": {
         "3.6": {
             "laz": "Lazarus-3.6-macosx-x86_64.pkg",
             "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
@@ -359,7 +359,7 @@ class Lazarus {
         }
     }
     async installLazarus() {
-        core.info(`installLazarus -- Installing Lazarus ${this._LazarusVersion} on platform: "${this._Platform}"; arch: "${this._Arch}"`);
+        core.info(`Installing Lazarus: ${this._LazarusVersion} Platform: "${this._Platform}" ARCH: "${this._Arch}"`);
         switch (this._LazarusVersion) {
             // Special case named version that installs the repository pakages on Ubuntu
             // but installs stable version under Windows
@@ -784,25 +784,27 @@ class Lazarus {
     _getPackageURL(pkg) {
         let result = "";
         // Replace periods with undescores due to JSON borking with periods or dashes
-        let lazVer = "v" + this._LazarusVersion.replace(/\./gi, "_");
         switch (this._Platform) {
             case "win32":
                 if (this._Arch == "x64") {
+                    // win64
                     result = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2064%20bits/Lazarus%20${this._LazarusVersion}/`;
-                    result += pkgs["win64"][lazVer];
+                    result += pkgs["win64"][this._LazarusVersion];
                 }
                 else {
+                    // win32
                     result = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2032%20bits/Lazarus%20${this._LazarusVersion}/`;
-                    result += pkgs[this._Platform][lazVer];
+                    result += pkgs[this._Platform][this._LazarusVersion];
                 }
                 break;
             case "linux":
                 result = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%20${this._LazarusVersion}/`;
-                result += pkgs[this._Platform][lazVer][pkg];
+                result += pkgs[this._Platform][this._LazarusVersion][pkg];
                 break;
             case "darwin":
                 result = `https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%20${this._LazarusVersion}/`;
-                result += pkgs[this._Platform][lazVer][pkg];
+                // pkgs[darwin][version][fileName]
+                result += pkgs[this._Platform][this._LazarusVersion][pkg];
                 break;
             default:
                 throw new Error(`getPackageName - Platform not implemented yet ${this._Platform}`);
