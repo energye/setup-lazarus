@@ -609,9 +609,7 @@ export class Lazarus {
                 result += pkgs[this._Platform][lazVer][pkg];
                 break;
             default:
-                throw new Error(
-                    `getPackageName - Platform not implemented yet ${this._Platform}`
-                );
+                throw new Error(`getPackageName - Platform not implemented yet ${this._Platform}`);
         }
 
         return result;
