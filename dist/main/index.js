@@ -864,12 +864,16 @@ async function run() {
         // `lazarus-version` input defined in action metadata file
         let lazarusVersion = core.getInput('lazarus-version');
         // `include-packages` input defined in action metadata file
+        let includePackagesArray = [];
         let includePackages = core.getInput('include-packages');
         // `with-cache` input defined in action metadata file
         let withCache = core.getInput('with-cache') == 'true';
         // 'os-arch' Installing 32-bit(i386) Lazarus on Windows 64
         let osArch = core.getInput('os-arch') || 'i386'; // all:x64, windows:i386, linux:arm64
-        let Installer = new inst.Installer(lazarusVersion, includePackages.split(','), withCache, osArch);
+        if (includePackages) {
+            includePackagesArray = includePackages.split(',');
+        }
+        let Installer = new inst.Installer(lazarusVersion, includePackagesArray, withCache, osArch);
         await Installer.install();
     }
     catch (error) {
@@ -932,14 +936,14 @@ class Packages {
         this.packageData = await this.getPackageList(`${this.baseUrl}/${this.jsonParam}`);
         core.info(`Fetched ${this.packageData.length} package items.`);
         const pkgsToInstall = await this.resolveDependencies(includePackages);
-        core.info(`Installing packages: ${pkgsToInstall.map((pkg) => pkg.displayName).join(", ")}`);
+        core.info(`Installing packages: ${pkgsToInstall.map((pkg) => pkg.DisplayName).join(", ")}`);
         await this.installAllPackages(pkgsToInstall);
     }
     async resolveDependencies(includePackages) {
         const pkgsToInstall = [];
         const pkgsToInstallNames = new Set();
         for (const requestedPkg of includePackages) {
-            const matchedPackages = this.packageData.filter((pkg) => pkg.displayName === requestedPkg.trim());
+            const matchedPackages = this.packageData.filter((pkg) => pkg.DisplayName === requestedPkg.trim());
             for (const pkg of matchedPackages) {
                 const deps = await this.getDependencies(pkg);
                 deps.forEach((dep) => this.addPackageIfNeeded(dep, pkgsToInstall, pkgsToInstallNames));
@@ -949,20 +953,20 @@ class Packages {
         return pkgsToInstall;
     }
     addPackageIfNeeded(pkg, pkgList, pkgNames) {
-        if (!pkgNames.has(pkg.displayName)) {
+        if (!pkgNames.has(pkg.DisplayName)) {
             pkgList.push(pkg);
-            pkgNames.add(pkg.displayName);
+            pkgNames.add(pkg.DisplayName);
         }
     }
     async getDependencies(pkg, seenPkgs = new Set()) {
-        if (seenPkgs.has(pkg.name))
+        if (seenPkgs.has(pkg.Name))
             return [];
-        seenPkgs.add(pkg.name);
+        seenPkgs.add(pkg.Name);
         const dependencies = [];
         for (const file of pkg.packages) {
-            const depNames = file.dependenciesStr.split(",").map((dep) => dep.trim());
+            const depNames = file.DependenciesAsString.split(",").map((dep) => dep.trim());
             for (const depName of depNames) {
-                const foundPkgs = this.packageData.filter((p) => p.containsPackage(depName) && p.name !== pkg.name);
+                const foundPkgs = this.packageData.filter((p) => p.containsPackage(depName) && p.Name !== pkg.Name);
                 for (const foundPkg of foundPkgs) {
                     dependencies.push(foundPkg, ...(await this.getDependencies(foundPkg, seenPkgs)));
                 }
@@ -973,8 +977,8 @@ class Packages {
     async installAllPackages(pkgsToInstall) {
         for (const pkg of pkgsToInstall) {
             try {
-                const pkgFile = await this.download(pkg.repositoryFileName);
-                const pkgFolder = await this.extract(pkgFile, path.join(this.getTempDirectory(), pkg.repositoryFileHash));
+                const pkgFile = await this.download(pkg.RepositoryFileName);
+                const pkgFolder = await this.extract(pkgFile, path.join(this.getTempDirectory(), pkg.RepositoryFileHash));
                 core.info(`Unzipped to: "${pkgFolder}/${pkg.baseDir}"`);
                 await (0, exec_1.exec)(`rm -rf ${pkgFile}`);
                 await this.clearDirectory(pkgFolder);
@@ -988,7 +992,7 @@ class Packages {
     }
     async installLpkFiles(pkgFolder, pkg) {
         for (const pkgFile of pkg.packages) {
-            const pkgPath = path.join(pkgFolder, pkg.baseDir, pkgFile.relativeFilePath, pkgFile.file);
+            const pkgPath = path.join(pkgFolder, pkg.baseDir, pkgFile.RelativeFilePath, pkgFile.PackageFile);
             const buildCommand = `lazbuild ${this.getPlatformFlags()} "${pkgPath}"`;
             core.info(`Adding and compiling package: ${pkgPath}`);
             await (0, exec_1.exec)(buildCommand.replace("--add-package", "--add-package-link"), [], { ignoreReturnCode: true });
@@ -1056,10 +1060,10 @@ class Packages {
 exports.Packages = Packages;
 class PackageData {
     constructor() {
-        this.name = "";
-        this.displayName = "";
-        this.repositoryFileName = "";
-        this.repositoryFileHash = "";
+        this.Name = "";
+        this.DisplayName = "";
+        this.RepositoryFileName = "";
+        this.RepositoryFileHash = "";
         this.pkgBaseDir = "";
         this.packages = [];
     }
@@ -1071,23 +1075,23 @@ class PackageData {
     }
     containsPackage(needle) {
         const [name] = needle.includes("(") ? needle.split("(") : [needle];
-        return this.packages.some((pkg) => pkg.file === `${name.trim()}.lpk`);
+        return this.packages.some((pkg) => pkg.PackageFile === `${name.trim()}.lpk`);
     }
 }
 class PackageFile {
     constructor() {
-        this.file = "";
-        this._relativeFilePath = "";
-        this.lazarusCompatibility = [];
-        this.freePascalCompatibility = [];
-        this.dependenciesStr = "";
-        this.type = -1;
+        this.PackageFile = "";
+        this._RelativeFilePath = "";
+        this.LazCompatibility = [];
+        this.FPCCompatability = [];
+        this.DependenciesAsString = "";
+        this.PackageType = -1;
     }
-    get relativeFilePath() {
-        return this._relativeFilePath;
+    get RelativeFilePath() {
+        return this._RelativeFilePath;
     }
-    set relativeFilePath(value) {
-        this._relativeFilePath = value.replace(/\\/gi, "");
+    set RelativeFilePath(value) {
+        this._RelativeFilePath = value.replace(/\\/gi, "");
     }
 }
 
