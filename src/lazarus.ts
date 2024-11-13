@@ -476,14 +476,29 @@ export class Lazarus {
 
             let fpcDirname = path.basename(fpcFilename, path.extname(fpcFilename));
             core.info(`Run Install fpc: ${lazarusPath}/${fpcDirname}`);
-            fs.writeFileSync(`${lazarusPath}/${fpcDirname}/yes.txt`, "\n");
-            await exec(`./install.sh < yes.txt`, [], {cwd: `${lazarusPath}/${fpcDirname}`});
+            await this.removeReadInput(`${lazarusPath}/${fpcDirname}/install.sh`);
+            // 删除脚本里的 read $askvar
+            await exec(`./install.sh`, [], {cwd: `${lazarusPath}/${fpcDirname}`});
 
             core.info(`Run Install lazarus: ${lazarusPath}`);
             await exec(`make clean all`, [], {cwd: lazarusPath});
         } catch (error) {
             throw (error as Error);
         }
+    }
+    // 删除要求用户输入的部分
+    private removeReadInput(path: string) {
+        let data = fs.readFileSync(path, 'utf8');
+        let lines = data.split("\n");
+        const newLines: string[] = lines.filter(line => !line.includes("read $askvar"));
+        data = "";
+        for (let i = 0; i < newLines.length; i++) {
+            if (i > 0) {
+                data += "\n"
+            }
+            data += newLines[i];
+        }
+        fs.writeFileSync(path, data);
     }
 
     private getPackageURL(pkg: string): string {

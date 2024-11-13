@@ -672,14 +672,29 @@ class Lazarus {
             await (0, exec_1.exec)("sudo apt-get install -q -y make binutils build-essential gdb subversion zip unzip libx11-dev libgtk2.0-dev libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev libgtk-3-dev");
             let fpcDirname = path.basename(fpcFilename, path.extname(fpcFilename));
             core.info(`Run Install fpc: ${lazarusPath}/${fpcDirname}`);
-            fs.writeFileSync(`${lazarusPath}/${fpcDirname}/yes.txt`, "\n");
-            await (0, exec_1.exec)(`./install.sh < yes.txt`, [], { cwd: `${lazarusPath}/${fpcDirname}` });
+            await this.removeReadInput(`${lazarusPath}/${fpcDirname}/install.sh`);
+            // 删除脚本里的 read $askvar
+            await (0, exec_1.exec)(`./install.sh`, [], { cwd: `${lazarusPath}/${fpcDirname}` });
             core.info(`Run Install lazarus: ${lazarusPath}`);
             await (0, exec_1.exec)(`make clean all`, [], { cwd: lazarusPath });
         }
         catch (error) {
             throw error;
         }
+    }
+    // 删除要求用户输入的部分
+    removeReadInput(path) {
+        let data = fs.readFileSync(path, 'utf8');
+        let lines = data.split("\n");
+        const newLines = lines.filter(line => !line.includes("read $askvar"));
+        data = "";
+        for (let i = 0; i < newLines.length; i++) {
+            if (i > 0) {
+                data += "\n";
+            }
+            data += newLines[i];
+        }
+        fs.writeFileSync(path, data);
     }
     getPackageURL(pkg) {
         let result = "";
