@@ -1,6 +1,5 @@
 import * as core from '@actions/core';
 import * as inst from './installer';
-import * as pkgs from "./packages";
 
 async function run(): Promise<void> {
     try {
@@ -17,10 +16,13 @@ async function run(): Promise<void> {
         // 'os-arch' Installing 32-bit(i386) Lazarus on Windows 64
         let osArch = core.getInput('os-arch') || 'i386'; // all:x64, windows:i386, linux:arm64
 
+        // 'source-install' Install using source code
+        let sourceInstall = Boolean(core.getInput('source-install'));
+
         if (includePackages) {
             includePackagesArray = includePackages.split(',');
         }
-        let Installer = new inst.Installer(lazarusVersion, includePackagesArray, withCache, osArch);
+        let Installer = new inst.Installer(lazarusVersion, includePackagesArray, withCache, osArch, sourceInstall);
         await Installer.install();
 
     } catch (error) {

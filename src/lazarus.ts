@@ -5,160 +5,23 @@ import * as os from "os";
 import * as path from "path";
 import {ok} from "assert";
 import * as fs from "fs";
-
 import {Cache} from "./cache";
+import * as pkgs from "./version";
 
 const StableVersion = "3.6";
-
-const pkgs: object = {
-    "win32": {
-        "3.6": "lazarus-3.6-fpc-3.2.2-win32.exe",
-        "3.4": "lazarus-3.4-fpc-3.2.2-win32.exe",
-        "3.2": "lazarus-3.2-fpc-3.2.2-win32.exe",
-        "3.0": "lazarus-3.0-fpc-3.2.2-win32.exe",
-        "2.2.6": "lazarus-2.2.6-fpc-3.2.2-win32.exe",
-        "2.2.4": "lazarus-2.2.4-fpc-3.2.2-win32.exe",
-        "2.2.2": "lazarus-2.2.2-fpc-3.2.2-win32.exe"
-    },
-    "win64": {
-        "3.6": "lazarus-3.6-fpc-3.2.2-win64.exe",
-        "3.4": "lazarus-3.4-fpc-3.2.2-win64.exe",
-        "3.2": "lazarus-3.2-fpc-3.2.2-win64.exe",
-        "3.0": "lazarus-3.0-fpc-3.2.2-win64.exe",
-        "2.2.6": "lazarus-2.2.6-fpc-3.2.2-win64.exe",
-        "2.2.4": "lazarus-2.2.4-fpc-3.2.2-win64.exe",
-        "2.2.2": "lazarus-2.2.2-fpc-3.2.2-win64.exe"
-    },
-    "linux": {
-        "3.6": {
-            "laz": "lazarus-project_3.6.0-0_amd64.deb",
-            "fpc": "fpc-laz_3.2.2-210709_amd64.deb",
-            "fpcsrc": "fpc-src_3.2.2-210709_amd64.deb",
-        },
-        "3.4": {
-            "laz": "lazarus-project_3.4.0-0_amd64.deb",
-            "fpc": "fpc-laz_3.2.2-210709_amd64.deb",
-            "fpcsrc": "fpc-src_3.2.2-210709_amd64.deb",
-        },
-        "3.2": {
-            "laz": "lazarus-project_3.2.0-0_amd64.deb",
-            "fpc": "fpc-laz_3.2.2-210709_amd64.deb",
-            "fpcsrc": "fpc-src_3.2.2-210709_amd64.deb"
-        },
-        "3.0": {
-            "laz": "lazarus-project_3.0.0-0_amd64.deb",
-            "fpc": "fpc-laz_3.2.2-210709_amd64.deb",
-            "fpcsrc": "fpc-src_3.2.2-210709_amd64.deb"
-        },
-        "2.2.6": {
-            "laz": "lazarus-project_2.2.6-0_amd64.deb",
-            "fpc": "fpc-laz_3.2.2-210709_amd64.deb",
-            "fpcsrc": "fpc-src_3.2.2-210709_amd64.deb"
-        },
-        "2.2.4": {
-            "laz": "lazarus-project_2.2.4-0_amd64.deb",
-            "fpc": "fpc-laz_3.2.2-210709_amd64.deb",
-            "fpcsrc": "fpc-src_3.2.2-210709_amd64.deb"
-        },
-        "2.2.2": {
-            "laz": "lazarus-project_2.2.2-0_amd64.deb",
-            "fpc": "fpc-laz_3.2.2-210709_amd64.deb",
-            "fpcsrc": "fpc-src_3.2.2-210709_amd64.deb"
-        }
-    },
-    "linuxARM64": {
-        "3.6": {
-            "fpcversion": "3.2.2",
-            "laz": "lazarus-3.6-0.tar.gz",
-            "fpc": "fpc-3.2.2.aarch64-linux.tar",
-            "fpcsrc": "fpc-3.2.2.source.tar.gz"
-        },
-        "3.4": {
-            "fpcversion": "3.2.2",
-            "laz": "lazarus-3.4-0.tar.gz",
-            "fpc": "fpc-3.2.2.aarch64-linux.tar",
-            "fpcsrc": "fpc-3.2.2.source.tar.gz"
-        },
-        "3.2": {
-            "fpcversion": "3.2.2",
-            "laz": "lazarus-3.2-0.tar.gz",
-            "fpc": "fpc-3.2.2.aarch64-linux.tar",
-            "fpcsrc": "fpc-3.2.2.source.tar.gz"
-        },
-        "3.0": {
-            "fpcversion": "3.2.2",
-            "laz": "lazarus-3.0-0.tar.gz",
-            "fpc": "fpc-3.2.2.aarch64-linux.tar",
-            "fpcsrc": "fpc-3.2.2.source.tar.gz"
-        },
-        "2.2.6": {
-            "fpcversion": "3.2.2",
-            "laz": "lazarus-2.2.6-0.tar.gz",
-            "fpc": "fpc-3.2.2.aarch64-linux.tar",
-            "fpcsrc": "fpc-3.2.2.source.tar.gz"
-        },
-        "2.2.4": {
-            "fpcversion": "3.2.2",
-            "laz": "lazarus-2.2.4-0.tar.gz",
-            "fpc": "fpc-3.2.2.aarch64-linux.tar",
-            "fpcsrc": "fpc-3.2.2.source.tar.gz"
-        },
-        "2.2.2": {
-            "fpcversion": "3.2.2",
-            "laz": "lazarus-2.2.2-0.tar.gz",
-            "fpc": "fpc-3.2.2.aarch64-linux.tar",
-            "fpcsrc": "fpc-3.2.2.source.tar.gz"
-        }
-    },
-    "darwin": {
-        "3.6": {
-            "laz": "Lazarus-3.6-macosx-x86_64.pkg",
-            "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
-            "fpcsrc": "fpc-src-3.2.2-20210709-macosx.dmg",
-        },
-        "3.4": {
-            "laz": "Lazarus-3.4-macosx-x86_64.pkg",
-            "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
-            "fpcsrc": "fpc-src-3.2.2-20210709-macosx.dmg",
-        },
-        "3.2": {
-            "laz": "Lazarus-3.2-macosx-x86_64.pkg",
-            "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
-            "fpcsrc": "fpc-src-3.2.2-20210709-macosx.dmg"
-        },
-        "3.0": {
-            "laz": "Lazarus-3.0-macosx-x86_64.pkg",
-            "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
-            "fpcsrc": "fpc-src-3.2.2-20210709-macosx.dmg"
-        },
-        "2.2.6": {
-            "laz": "Lazarus-2.2.6-0-x86_64-macosx.pkg",
-            "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
-            "fpcsrc": "fpc-src-3.2.2-20210709-macosx.dmg"
-        },
-        "2.2.4": {
-            "laz": "Lazarus-2.2.4-0-x86_64-macosx.pkg",
-            "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
-            "fpcsrc": "fpc-src-3.2.2-20210709-macosx.dmg"
-        },
-        "2.2.2": {
-            "laz": "Lazarus-2.2.2-0-x86_64-macosx.pkg",
-            "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
-            "fpcsrc": "fpc-src-3.2.2-20210709-macosx.dmg"
-        }
-    },
-};
 
 export class Lazarus {
     private _Platform: string = os.platform();
     private _Arch: string = os.arch();
     private _LazarusVersion: string = "";
     private _Cache: Cache;
+    private _SourceInstall: boolean;
 
-    constructor(LazarusVersion: string, WithCache: boolean, OsArch: string) {
+    constructor(LazarusVersion: string, WithCache: boolean, OsArch: string, sourceInstall: boolean) {
         this._LazarusVersion = LazarusVersion;
         this._Cache = new Cache(WithCache);
         this._Cache.key = this._LazarusVersion + "-" + this._Arch + "-" + this._Platform;
+        this._SourceInstall = sourceInstall;
         if (OsArch != '') {
             this._Arch = OsArch
         }
@@ -243,22 +106,22 @@ export class Lazarus {
         switch (this._Platform) {
             case "win32":
                 // Get the URL of the file to download
-                let downloadURL: string = this._getPackageURL("laz");
+                let downloadURL: string = this.getPackageURL("laz");
                 core.info(`_downloadLazarus - Downloading ${downloadURL}`);
                 let downloadPath_WIN: string;
                 try {
                     if (cacheRestored) {
                         // Use cached version
-                        downloadPath_WIN = path.join(this._getTempDirectory(), `lazarus-${this._LazarusVersion}.exe`);
+                        downloadPath_WIN = path.join(this.getTempDirectory(), `lazarus-${this._LazarusVersion}.exe`);
                         core.info(`Download Lazarus - Using cache restored into ${downloadPath_WIN}`);
                     } else {
                         // Perform the download
-                        downloadPath_WIN = await tc.downloadTool(downloadURL, path.join(this._getTempDirectory(), `lazarus-${this._LazarusVersion}.exe`));
+                        downloadPath_WIN = await tc.downloadTool(downloadURL, path.join(this.getTempDirectory(), `lazarus-${this._LazarusVersion}.exe`));
                         core.info(`Download Lazarus - Downloaded into ${downloadPath_WIN}`);
                     }
 
                     // Run the installer
-                    let lazarusDir: string = path.join(this._getTempDirectory(), "lazarus");
+                    let lazarusDir: string = path.join(this.getTempDirectory(), "lazarus");
                     await exec(`${downloadPath_WIN} /VERYSILENT /SP- /DIR=${lazarusDir}`);
 
                     // Add this path to the runner's global path
@@ -286,20 +149,25 @@ export class Lazarus {
             case "linux":
                 // Perform a repository update
                 await exec("sudo apt update");
+                // linux arm64 和 linux x64 使用源码安装时
+                if (this._Arch == 'arm64' || this._SourceInstall) {
+                    await this.sourceInstallLinux(cacheRestored)
+                    break
+                }
                 if (this._Arch == 'x64') {
                     let downloadPath_LIN: string;
 
                     // Get the URL for Free Pascal Source
-                    let downloadFPCSRCURL: string = this._getPackageURL('fpcsrc');
+                    let downloadFPCSRCURL: string = this.getPackageURL('fpcsrc');
                     core.info(`Downloading Lazarus URL: ${downloadFPCSRCURL}`);
                     try {
                         if (cacheRestored) {
                             // Use cached version
-                            downloadPath_LIN = path.join(this._getTempDirectory(), 'fpcsrc.deb');
+                            downloadPath_LIN = path.join(this.getTempDirectory(), 'fpcsrc.deb');
                             core.info(`Downloading Lazarus - Using cache restored into ${downloadPath_LIN}`);
                         } else {
                             // Perform the download
-                            downloadPath_LIN = await tc.downloadTool(downloadFPCSRCURL, path.join(this._getTempDirectory(), 'fpcsrc.deb'));
+                            downloadPath_LIN = await tc.downloadTool(downloadFPCSRCURL, path.join(this.getTempDirectory(), 'fpcsrc.deb'));
                             core.info(`Downloading Lazarus - Downloaded into ${downloadPath_LIN}`);
                         }
                         // Install the package
@@ -309,16 +177,16 @@ export class Lazarus {
                     }
 
                     // Get the URL for Free Pascal's compiler
-                    let downloadFPCURL: string = this._getPackageURL('fpc');
+                    let downloadFPCURL: string = this.getPackageURL('fpc');
                     core.info(`Download Lazarus - Downloading ${downloadFPCURL}`);
                     try {
                         if (cacheRestored) {
                             // Use cached version
-                            downloadPath_LIN = path.join(this._getTempDirectory(), 'fpc.deb');
+                            downloadPath_LIN = path.join(this.getTempDirectory(), 'fpc.deb');
                             core.info(`Download Lazarus - Using cache restored into ${downloadPath_LIN}`);
                         } else {
                             // Perform the download
-                            downloadPath_LIN = await tc.downloadTool(downloadFPCURL, path.join(this._getTempDirectory(), 'fpc.deb'));
+                            downloadPath_LIN = await tc.downloadTool(downloadFPCURL, path.join(this.getTempDirectory(), 'fpc.deb'));
                             core.info(`Download Lazarus - Downloaded into ${downloadPath_LIN}`);
                         }
                         // Install the package
@@ -328,16 +196,16 @@ export class Lazarus {
                     }
 
                     // Get the URL for the Lazarus IDE
-                    let downloadLazURL: string = this._getPackageURL('laz');
+                    let downloadLazURL: string = this.getPackageURL('laz');
                     core.info(`Download Lazarus - Downloading ${downloadLazURL}`);
                     try {
                         if (cacheRestored) {
                             // Use cached version
-                            downloadPath_LIN = path.join(this._getTempDirectory(), 'lazarus.deb');
+                            downloadPath_LIN = path.join(this.getTempDirectory(), 'lazarus.deb');
                             core.info(`Download Lazarus - Using cache restored into ${downloadPath_LIN}`);
                         } else {
                             // Perform the download
-                            downloadPath_LIN = await tc.downloadTool(downloadLazURL, path.join(this._getTempDirectory(), 'lazarus.deb'));
+                            downloadPath_LIN = await tc.downloadTool(downloadLazURL, path.join(this.getTempDirectory(), 'lazarus.deb'));
                             core.info(`Download Lazarus - Downloaded into ${downloadPath_LIN}`);
                         }
                         // Install the package
@@ -345,16 +213,13 @@ export class Lazarus {
                     } catch (error) {
                         throw (error as Error);
                     }
-                } else if (this._Arch == 'arm64') {
-                    core.info(`linux arm64`);
-                    await this.linuxARM64(cacheRestored)
                 }
                 break;
             case "darwin":
                 if (this._Arch == 'x64') {
                     let downloadPath_DAR: string;
                     // Get the URL for Free Pascal Source
-                    let downloadFPCSRCURLDAR: string = this._getPackageURL('fpcsrc');
+                    let downloadFPCSRCURLDAR: string = this.getPackageURL('fpcsrc');
                     core.info(`Download Lazarus - Downloading ${downloadFPCSRCURLDAR}`);
                     try {
                         // Decide what the local download filename should be
@@ -362,11 +227,11 @@ export class Lazarus {
 
                         if (cacheRestored) {
                             // Use cached version
-                            downloadPath_DAR = path.join(this._getTempDirectory(), downloadName);
+                            downloadPath_DAR = path.join(this.getTempDirectory(), downloadName);
                             core.info(`Download Lazarus - Using cache restored into ${downloadPath_DAR}`);
                         } else {
                             // Perform the download
-                            downloadPath_DAR = await tc.downloadTool(downloadFPCSRCURLDAR, path.join(this._getTempDirectory(), downloadName));
+                            downloadPath_DAR = await tc.downloadTool(downloadFPCSRCURLDAR, path.join(this.getTempDirectory(), downloadName));
                             core.info(`Download Lazarus - Downloaded into ${downloadPath_DAR}`);
                         }
 
@@ -392,7 +257,7 @@ export class Lazarus {
                     }
 
                     // Get the URL for Free Pascal's compiler
-                    let downloadFPCURLDAR: string = this._getPackageURL('fpc');
+                    let downloadFPCURLDAR: string = this.getPackageURL('fpc');
                     core.info(`Download Lazarus - Downloading ${downloadFPCURLDAR}`);
                     try {
                         // Decide what the local download filename should be
@@ -400,11 +265,11 @@ export class Lazarus {
 
                         if (cacheRestored) {
                             // Use cached version
-                            downloadPath_DAR = path.join(this._getTempDirectory(), downloadName);
+                            downloadPath_DAR = path.join(this.getTempDirectory(), downloadName);
                             core.info(`Download Lazarus - Using cache restored into ${downloadPath_DAR}`);
                         } else {
                             // Perform the download
-                            downloadPath_DAR = await tc.downloadTool(downloadFPCURLDAR, path.join(this._getTempDirectory(), downloadName));
+                            downloadPath_DAR = await tc.downloadTool(downloadFPCURLDAR, path.join(this.getTempDirectory(), downloadName));
                             core.info(`Download Lazarus - Downloaded into ${downloadPath_DAR}`);
                         }
 
@@ -431,7 +296,7 @@ export class Lazarus {
                     }
 
                     // Get the URL for the Lazarus IDE
-                    let downloadLazURLDAR: string = this._getPackageURL('laz');
+                    let downloadLazURLDAR: string = this.getPackageURL('laz');
                     core.info(`Download Lazarus - Downloading ${downloadLazURLDAR}`);
                     try {
                         // Decide what the local download filename should be
@@ -439,11 +304,11 @@ export class Lazarus {
 
                         if (cacheRestored) {
                             // Use the cached version
-                            downloadPath_DAR = path.join(this._getTempDirectory(), downloadName);
+                            downloadPath_DAR = path.join(this.getTempDirectory(), downloadName);
                             core.info(`Download Lazarus - Using cache restored into ${downloadPath_DAR}`);
                         } else {
                             // Perform the download
-                            downloadPath_DAR = await tc.downloadTool(downloadLazURLDAR, path.join(this._getTempDirectory(), downloadName));
+                            downloadPath_DAR = await tc.downloadTool(downloadLazURLDAR, path.join(this.getTempDirectory(), downloadName));
                             core.info(`Download Lazarus - Downloaded into ${downloadPath_DAR}`);
                         }
 
@@ -498,95 +363,126 @@ export class Lazarus {
     }
 
     private async macOSARM64(cacheRestored: boolean) {
-        let tempDir = this._getTempDirectory();
-        let workspace = this._getWorkspace();
+        let tempDir = this.getTempDirectory();
+        let workspace = this.getWorkspace();
         core.info("_workspace: " + workspace)
     }
 
     /**
-     * @private
-     * linux arm 64单独安装
      * 该安装模式依赖于github actions: uraimo/run-on-arch-action
-     * 在这里手动编译安装lazarus
+     * 使用源码编译lazarus
      */
-    private async linuxARM64(cacheRestored: boolean) {
-        let tempDir = this._getTempDirectory();
-        let workspace = this._getWorkspace();
+    private async sourceInstallLinux(cacheRestored: boolean) {
+        let tempDir = this.getTempDirectory();
+        let workspace = this.getWorkspace();
         core.info("_workspace: " + workspace)
-
-        let arm64 = pkgs['linuxARM64']
-        let version = arm64[this._LazarusVersion]
+        let arch = this._Arch;
+        // 返回当前系统架构的 fpc 名
+        let fpcArchName = function (fpcName: string): string {
+            // fpcName: fpc-3.2.2.%s-linux.tar
+            // aarch64 | x86_64
+            let tempArch = arch;
+            if (tempArch == "x64") {
+                tempArch = "x86_64"
+            } else if (tempArch == "arm64") {
+                tempArch = "aarch64"
+            }
+            fpcName = fpcName.replace("%s", tempArch);
+            return fpcName
+        }
+        let source = pkgs['source']
+        let version = source[this._LazarusVersion]
         let fpcVersion = version['fpcversion']
+        let lazFilename = version['laz'];
+        let fpcFilename = fpcArchName(version['fpc']);
+        let fpcsrcFilename = version['fpcsrc'];
+
+        core.info(`Install Source Linux Lazarus: ${lazFilename} fpc: ${fpcFilename} fpcsrc: ${fpcsrcFilename}`);
 
         // lazarus source, tar.gz
-        let lazarusDownloadURL: string = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Zip%20_%20GZip/Lazarus%20${this._LazarusVersion}/`
-        lazarusDownloadURL += version['laz']
+        let lazarusDownloadURL: string = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Zip%20_%20GZip/Lazarus%20${this._LazarusVersion}/${lazFilename}`;
         // fcp, tar
-        let fpcDownloadURL: string = `https://sourceforge.net/projects/freepascal/files/Linux/${fpcVersion}/`
-        fpcDownloadURL += version['fpc']
+        let fpcDownloadURL: string = `https://sourceforge.net/projects/freepascal/files/Linux/${fpcVersion}/${fpcFilename}`;
         // fpc source, tar.gz
-        let fpcsrcDownloadURL: string = `https://sourceforge.net/projects/freepascal/files/Source/${fpcVersion}/`
-        fpcsrcDownloadURL += version['fpcsrc']
+        let fpcsrcDownloadURL: string = `https://sourceforge.net/projects/freepascal/files/Source/${fpcVersion}/${fpcsrcFilename}`;
 
+        // 将 lazarus 解压目录做为根目录
+        // fpc 和 fpcsrc 都依次解压到 lazarus 目录
         let lazarusPath: string = path.join(workspace, "lazarus");
-        let downloadPath_LIN: string;
 
+        let lazDownloadPath: string;
+        let fpcDownloadPath: string;
+        let fpcsrcDownloadPath: string;
         core.info(`Download Lazarus - Downloading ${lazarusDownloadURL}`);
         try {
-            let fileName: string = version['laz'];
             if (cacheRestored) {
                 // 使用缓存
-                downloadPath_LIN = path.join(tempDir, fileName);
-                core.info(`Download Lazarus - Using cache restored into ${downloadPath_LIN}`);
+                lazDownloadPath = path.join(tempDir, lazFilename);
+                core.info(`Download Lazarus - Using cache restored into ${lazDownloadPath}`);
             } else {
                 // 下载
-                downloadPath_LIN = await tc.downloadTool(lazarusDownloadURL, path.join(tempDir, fileName));
-                core.info(`Download Lazarus - Downloaded into ${downloadPath_LIN}`);
+                lazDownloadPath = await tc.downloadTool(lazarusDownloadURL, path.join(tempDir, lazFilename));
+                core.info(`Download Lazarus - Downloaded into ${lazDownloadPath}`);
             }
             // 解压lazarus
-            await exec(`tar -xvf ${downloadPath_LIN} -C ${workspace}`);
+            await exec(`tar -xvf ${lazDownloadPath} -C ${workspace}`);
         } catch (error) {
             throw (error as Error);
         }
 
-        core.info(`_downloadFPC - Downloading ${fpcDownloadURL}`);
+        core.info(`Download fpc - Downloading ${fpcDownloadURL}`);
         try {
-            let fileName: string = version['fpc'];
             if (cacheRestored) {
                 // 使用缓存
-                downloadPath_LIN = path.join(tempDir, fileName);
-                core.info(`_downloadFPC - Using cache restored into ${downloadPath_LIN}`);
+                fpcDownloadPath = path.join(tempDir, fpcFilename);
+                core.info(`Download fpc - Using cache restored into ${fpcDownloadPath}`);
             } else {
                 // 下载
-                downloadPath_LIN = await tc.downloadTool(fpcDownloadURL, path.join(tempDir, fileName));
-                core.info(`_downloadFPC - Downloaded into ${downloadPath_LIN}`);
+                fpcDownloadPath = await tc.downloadTool(fpcDownloadURL, path.join(tempDir, fpcFilename));
+                core.info(`Download fpc - Downloaded into ${fpcDownloadPath}`);
             }
             // 解压fpc
-            await exec(`tar -xvf ${downloadPath_LIN} -C ${lazarusPath}`);
+            await exec(`tar -xvf ${fpcDownloadPath} -C ${lazarusPath}`);
         } catch (error) {
             throw (error as Error);
         }
 
-        core.info(`_downloadFPCSrc - Downloading ${fpcsrcDownloadURL}`);
+        core.info(`Download fpcrc - Downloading ${fpcsrcDownloadURL}`);
         try {
-            let fileName: string = version['fpcsrc'];
             if (cacheRestored) {
                 // 使用缓存
-                downloadPath_LIN = path.join(tempDir, fileName);
-                core.info(`_downloadFPCSrc - Using cache restored into ${downloadPath_LIN}`);
+                fpcsrcDownloadPath = path.join(tempDir, fpcsrcFilename);
+                core.info(`Download fpcrc - Using cache restored into ${fpcsrcDownloadPath}`);
             } else {
                 // 下载
-                downloadPath_LIN = await tc.downloadTool(fpcsrcDownloadURL, path.join(tempDir, fileName));
-                core.info(`_downloadFPCSrc - Downloaded into ${downloadPath_LIN}`);
+                fpcsrcDownloadPath = await tc.downloadTool(fpcsrcDownloadURL, path.join(tempDir, fpcsrcFilename));
+                core.info(`Download fpcrc - Downloaded into ${fpcsrcDownloadPath}`);
             }
             // 解压fpcsrc
-            await exec(`tar -xvf ${downloadPath_LIN} -C ${lazarusPath}`);
+            await exec(`tar -xvf ${fpcsrcDownloadPath} -C ${lazarusPath}`);
+        } catch (error) {
+            throw (error as Error);
+        }
+
+        core.info(`Run Install fpc & Lazarus`);
+        try {
+            core.info(`Run Install: apt-get install dependent`);
+            await exec("sudo apt-get update -q -y");
+            await exec("sudo apt-get install -q -y git");
+            await exec("sudo apt-get install -q -y make binutils build-essential gdb subversion zip unzip libx11-dev libgtk2.0-dev libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev libgtk-3-dev");
+
+            let fpcDirname = path.basename(fpcFilename, path.extname(fpcFilename));
+            core.info(`Run Install fpc: ${lazarusPath}/${fpcDirname}`);
+            await exec(`cd ${lazarusPath}/${fpcDirname} && ./install.sh <<esxu`);
+
+            core.info(`Run Install lazarus: ${lazarusPath}`);
+            await exec(`cd ${lazarusPath} && make clean all`);
         } catch (error) {
             throw (error as Error);
         }
     }
 
-    private _getPackageURL(pkg: string): string {
+    private getPackageURL(pkg: string): string {
         let result: string = "";
         // Replace periods with undescores due to JSON borking with periods or dashes
         switch (this._Platform) {
@@ -617,14 +513,14 @@ export class Lazarus {
     }
 
 
-    private _getTempDirectory(): string {
+    private getTempDirectory(): string {
         let tempDirectory = process.env["RUNNER_TEMP"] || "";
         ok(tempDirectory, "Expected RUNNER_TEMP to be defined");
         tempDirectory = path.join(tempDirectory, "installers");
         return tempDirectory;
     }
 
-    private _getWorkspace(): string {
+    private getWorkspace(): string {
         let workspace = process.env['RUNNER_WORKSPACE'] || '';
         ok(workspace, 'Expected RUNNER_WORKSPACE to be defined');
         return workspace;

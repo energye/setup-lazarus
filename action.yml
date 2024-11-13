@@ -19,9 +19,13 @@ inputs:
     required: false
     default: false
   os-arch:
-    description: 'Installing 32-bit Lazarus on Windows 64'
+    description: 'Specify architecture'
     required: false
     default: 'x64'
+  source-install:
+    description: 'Install using source code. For Linux'
+    required: false
+    default: false
 
 runs:
   using: 'node20'

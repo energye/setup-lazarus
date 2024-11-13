@@ -10,8 +10,8 @@ export class Installer {
     private packages: pkgs.Packages;
     private packageList: string[];
 
-    constructor(lazarusVersion: string, packageList: string[], useCache: boolean, osArch: string) {
-        this.lazarus = new lazarus.Lazarus(lazarusVersion, useCache, osArch);
+    constructor(lazarusVersion: string, packageList: string[], useCache: boolean, osArch: string, sourceInstall: boolean) {
+        this.lazarus = new lazarus.Lazarus(lazarusVersion, useCache, osArch, sourceInstall);
         this.packageList = packageList;
         this.packages = new pkgs.Packages(lazarusVersion, REPO_BASE_URL, PACKAGE_LIST_JSON);
     }
