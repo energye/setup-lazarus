@@ -425,7 +425,7 @@ export class Lazarus {
                 core.info(`Download Lazarus - Downloaded into ${lazDownloadPath}`);
             }
             // 解压lazarus
-            await exec(`tar -xvf ${lazDownloadPath} -C ${workspace}`);
+            await exec(`tar -xvf ${lazDownloadPath} -C ${workspace} -q`);
         } catch (error) {
             throw (error as Error);
         }
@@ -442,7 +442,7 @@ export class Lazarus {
                 core.info(`Download fpc - Downloaded into ${fpcDownloadPath}`);
             }
             // 解压fpc
-            await exec(`tar -xvf ${fpcDownloadPath} -C ${lazarusPath}`);
+            await exec(`tar -xvf ${fpcDownloadPath} -C ${lazarusPath} -q`);
         } catch (error) {
             throw (error as Error);
         }
@@ -459,7 +459,7 @@ export class Lazarus {
                 core.info(`Download fpcrc - Downloaded into ${fpcsrcDownloadPath}`);
             }
             // 解压fpcsrc
-            await exec(`tar -xvf ${fpcsrcDownloadPath} -C ${lazarusPath}`);
+            await exec(`tar -xvf ${fpcsrcDownloadPath} -C ${lazarusPath} -q`);
         } catch (error) {
             throw (error as Error);
         }
@@ -473,10 +473,10 @@ export class Lazarus {
 
             let fpcDirname = path.basename(fpcFilename, path.extname(fpcFilename));
             core.info(`Run Install fpc: ${lazarusPath}/${fpcDirname}`);
-            await exec(`cd ${lazarusPath}/${fpcDirname} && ./install.sh <<esxu`);
+            await exec(`./install.sh <<esxu`, [], {cwd: `${lazarusPath}/${fpcDirname}`});
 
             core.info(`Run Install lazarus: ${lazarusPath}`);
-            await exec(`cd ${lazarusPath} && make clean all`);
+            await exec(`make clean all`, [], {cwd: lazarusPath});
         } catch (error) {
             throw (error as Error);
         }

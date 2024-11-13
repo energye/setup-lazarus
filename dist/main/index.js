@@ -620,7 +620,7 @@ class Lazarus {
                 core.info(`Download Lazarus - Downloaded into ${lazDownloadPath}`);
             }
             // 解压lazarus
-            await (0, exec_1.exec)(`tar -xvf ${lazDownloadPath} -C ${workspace}`);
+            await (0, exec_1.exec)(`tar -xvf ${lazDownloadPath} -C ${workspace} -q`);
         }
         catch (error) {
             throw error;
@@ -638,7 +638,7 @@ class Lazarus {
                 core.info(`Download fpc - Downloaded into ${fpcDownloadPath}`);
             }
             // 解压fpc
-            await (0, exec_1.exec)(`tar -xvf ${fpcDownloadPath} -C ${lazarusPath}`);
+            await (0, exec_1.exec)(`tar -xvf ${fpcDownloadPath} -C ${lazarusPath} -q`);
         }
         catch (error) {
             throw error;
@@ -656,7 +656,7 @@ class Lazarus {
                 core.info(`Download fpcrc - Downloaded into ${fpcsrcDownloadPath}`);
             }
             // 解压fpcsrc
-            await (0, exec_1.exec)(`tar -xvf ${fpcsrcDownloadPath} -C ${lazarusPath}`);
+            await (0, exec_1.exec)(`tar -xvf ${fpcsrcDownloadPath} -C ${lazarusPath} -q`);
         }
         catch (error) {
             throw error;
@@ -669,9 +669,9 @@ class Lazarus {
             await (0, exec_1.exec)("sudo apt-get install -q -y make binutils build-essential gdb subversion zip unzip libx11-dev libgtk2.0-dev libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev libgtk-3-dev");
             let fpcDirname = path.basename(fpcFilename, path.extname(fpcFilename));
             core.info(`Run Install fpc: ${lazarusPath}/${fpcDirname}`);
-            await (0, exec_1.exec)(`cd ${lazarusPath}/${fpcDirname} && ./install.sh <<esxu`);
+            await (0, exec_1.exec)(`./install.sh <<esxu`, [], { cwd: `${lazarusPath}/${fpcDirname}` });
             core.info(`Run Install lazarus: ${lazarusPath}`);
-            await (0, exec_1.exec)(`cd ${lazarusPath} && make clean all`);
+            await (0, exec_1.exec)(`make clean all`, [], { cwd: lazarusPath });
         }
         catch (error) {
             throw error;
