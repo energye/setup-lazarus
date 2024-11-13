@@ -30,28 +30,20 @@ export class Cache {
             return false;
         }
 
-        core.info(
-            `Cache.restore -- Attempting to restore with Key: ${this.cacheKey}, Directory: ${this.cacheDir}`
-        );
+        core.info(`Cache.restore -- Attempting to restore with Key: ${this.cacheKey}, Directory: ${this.cacheDir}`);
         try {
-            const cacheRestored = await cache.restoreCache(
-                [this.cacheDir],
-                this.cacheKey
-            );
+            const cacheRestored = await cache.restoreCache([this.cacheDir], this.cacheKey);
             if (cacheRestored) {
                 core.info("Cache.restore -- Cache hit, cache restored successfully.");
+                return true ;
             } else {
                 core.info("Cache.restore -- Cache miss, no cache found.");
                 core.exportVariable("SAVE_CACHE_DIR", this.cacheDir);
                 core.exportVariable("SAVE_CACHE_KEY", this.cacheKey);
+                return false ;
             }
-            return cacheRestored !== null;
         } catch (error) {
-            core.error(
-                `Cache.restore -- Error during cache restoration: ${
-                    (error as Error).message
-                }`
-            );
+            core.error(`Cache.restore -- Error during cache restoration: ${(error as Error).message}`);
             return false;
         }
     }

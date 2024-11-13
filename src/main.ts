@@ -12,7 +12,7 @@ async function run(): Promise<void> {
         let includePackages = core.getInput('include-packages');
 
         // `with-cache` input defined in action metadata file
-        let withCache = core.getInput('with-cache') == 'true';
+        let withCache = Boolean(core.getInput('with-cache'));
 
         // 'os-arch' Installing 32-bit(i386) Lazarus on Windows 64
         let osArch = core.getInput('os-arch') || 'i386'; // all:x64, windows:i386, linux:arm64

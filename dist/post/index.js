@@ -59,13 +59,14 @@ class Cache {
             const cacheRestored = await cache.restoreCache([this.cacheDir], this.cacheKey);
             if (cacheRestored) {
                 core.info("Cache.restore -- Cache hit, cache restored successfully.");
+                return true;
             }
             else {
                 core.info("Cache.restore -- Cache miss, no cache found.");
                 core.exportVariable("SAVE_CACHE_DIR", this.cacheDir);
                 core.exportVariable("SAVE_CACHE_KEY", this.cacheKey);
+                return false;
             }
-            return cacheRestored !== null;
         }
         catch (error) {
             core.error(`Cache.restore -- Error during cache restoration: ${error.message}`);

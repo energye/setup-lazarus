@@ -17,7 +17,7 @@ inputs:
   with-cache:
     description: 'Use cache for installer files'
     required: false
-    default: "false"
+    default: false
   os-arch:
     description: 'Installing 32-bit Lazarus on Windows 64'
     required: false
