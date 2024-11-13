@@ -476,9 +476,8 @@ export class Lazarus {
 
             let fpcDirname = path.basename(fpcFilename, path.extname(fpcFilename));
             core.info(`Run Install fpc: ${lazarusPath}/${fpcDirname}`);
-            await this.removeReadInput(`${lazarusPath}/${fpcDirname}/install.sh`);
             // 删除脚本里的 read $askvar
-            await exec(`./install.sh`, [], {cwd: `${lazarusPath}/${fpcDirname}`});
+            await exec(`echo y | ./install.sh`, [], {cwd: `${lazarusPath}/${fpcDirname}`});
 
             core.info(`Run Install lazarus: ${lazarusPath}`);
             await exec(`make clean all`, [], {cwd: lazarusPath});

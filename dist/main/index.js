@@ -672,9 +672,8 @@ class Lazarus {
             await (0, exec_1.exec)("sudo apt-get install -q -y make binutils build-essential gdb subversion zip unzip libx11-dev libgtk2.0-dev libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev libgtk-3-dev");
             let fpcDirname = path.basename(fpcFilename, path.extname(fpcFilename));
             core.info(`Run Install fpc: ${lazarusPath}/${fpcDirname}`);
-            await this.removeReadInput(`${lazarusPath}/${fpcDirname}/install.sh`);
             // 删除脚本里的 read $askvar
-            await (0, exec_1.exec)(`./install.sh`, [], { cwd: `${lazarusPath}/${fpcDirname}` });
+            await (0, exec_1.exec)(`echo y | ./install.sh`, [], { cwd: `${lazarusPath}/${fpcDirname}` });
             core.info(`Run Install lazarus: ${lazarusPath}`);
             await (0, exec_1.exec)(`make clean all`, [], { cwd: lazarusPath });
         }
