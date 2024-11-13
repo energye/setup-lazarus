@@ -208,7 +208,7 @@ const path = __importStar(__nccwpck_require__(6928));
 const assert_1 = __nccwpck_require__(2613);
 const fs = __importStar(__nccwpck_require__(9896));
 const cache_1 = __nccwpck_require__(5914);
-const pkgs = __importStar(__nccwpck_require__(7992));
+const version_1 = __nccwpck_require__(7992);
 const StableVersion = "3.6";
 class Lazarus {
     constructor(LazarusVersion, WithCache, OsArch, sourceInstall) {
@@ -324,14 +324,14 @@ class Lazarus {
                     core.info(`Download Lazarus - Adding '${lazarusDir}' to PATH`);
                     // Add the path to fpc.exe to the runner's global path
                     if (this._Arch == 'x64') {
-                        let lazVer = pkgs['win64'][this._LazarusVersion].split('-');
+                        let lazVer = version_1.versions['win64'][this._LazarusVersion].split('-');
                         let fpc_version = lazVer[3];
                         let fpcDir = path.join(lazarusDir, 'fpc', fpc_version, 'bin', 'x86_64-win64');
                         core.addPath(fpcDir);
                         core.info(`Download Lazarus - Adding '${fpcDir}' to PATH`);
                     }
                     else {
-                        let parts = pkgs['win32'][this._LazarusVersion].split('-');
+                        let parts = version_1.versions['win32'][this._LazarusVersion].split('-');
                         let fpc_version = parts[3];
                         let fpcDir = path.join(lazarusDir, 'fpc', fpc_version, 'bin', 'i386-win32');
                         core.addPath(fpcDir);
@@ -588,7 +588,7 @@ class Lazarus {
             fpcName = fpcName.replace("%s", tempArch);
             return fpcName;
         };
-        let source = pkgs['source'];
+        let source = version_1.versions['source'];
         let version = source[this._LazarusVersion];
         let fpcVersion = version['fpcversion'];
         let lazFilename = version['laz'];
@@ -685,22 +685,22 @@ class Lazarus {
                 if (this._Arch == "x64") {
                     // win64
                     result = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2064%20bits/Lazarus%20${this._LazarusVersion}/`;
-                    result += pkgs["win64"][this._LazarusVersion];
+                    result += version_1.versions["win64"][this._LazarusVersion];
                 }
                 else {
                     // win32
                     result = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2032%20bits/Lazarus%20${this._LazarusVersion}/`;
-                    result += pkgs[this._Platform][this._LazarusVersion];
+                    result += version_1.versions[this._Platform][this._LazarusVersion];
                 }
                 break;
             case "linux":
                 result = `https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%20${this._LazarusVersion}/`;
-                result += pkgs[this._Platform][this._LazarusVersion][pkg];
+                result += version_1.versions[this._Platform][this._LazarusVersion][pkg];
                 break;
             case "darwin":
                 result = `https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%20${this._LazarusVersion}/`;
                 // pkgs[darwin][version][fileName]
-                result += pkgs[this._Platform][this._LazarusVersion][pkg];
+                result += version_1.versions[this._Platform][this._LazarusVersion][pkg];
                 break;
             default:
                 throw new Error(`getPackageName - Platform not implemented yet ${this._Platform}`);
@@ -1002,7 +1002,8 @@ class PackageFile {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const pkgs = {
+exports.versions = void 0;
+exports.versions = {
     "win32": {
         "3.6": "lazarus-3.6-fpc-3.2.2-win32.exe",
         "3.4": "lazarus-3.4-fpc-3.2.2-win32.exe",
@@ -1140,7 +1141,6 @@ const pkgs = {
         }
     },
 };
-exports["default"] = pkgs;
 
 
 /***/ }),

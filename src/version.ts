@@ -1,4 +1,4 @@
-const pkgs: object = {
+export const versions = {
     "win32": {
         "3.6": "lazarus-3.6-fpc-3.2.2-win32.exe",
         "3.4": "lazarus-3.4-fpc-3.2.2-win32.exe",
@@ -136,5 +136,3 @@ const pkgs: object = {
         }
     },
 };
-
-export default pkgs;
