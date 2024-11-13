@@ -476,7 +476,8 @@ export class Lazarus {
 
             let fpcDirname = path.basename(fpcFilename, path.extname(fpcFilename));
             core.info(`Run Install fpc: ${lazarusPath}/${fpcDirname}`);
-            await exec(`./install.sh <<esxu`, [], {cwd: `${lazarusPath}/${fpcDirname}`});
+            await exec(`echo '\n' yes.txt`,[], {cwd: `${lazarusPath}/${fpcDirname}`})
+            await exec(`./install.sh < yes.txt`, [], {cwd: `${lazarusPath}/${fpcDirname}`});
 
             core.info(`Run Install lazarus: ${lazarusPath}`);
             await exec(`make clean all`, [], {cwd: lazarusPath});
