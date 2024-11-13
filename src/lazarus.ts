@@ -425,8 +425,8 @@ export class Lazarus {
                 core.info(`Download Lazarus - Downloaded into ${lazDownloadPath}`);
             }
             // 解压lazarus
-            core.info(`unzip: tar -xvf ${lazDownloadPath} -C ${workspace} > /dev/null 2>&1`);
-            await exec(`tar -xvf ${lazDownloadPath} -C ${workspace} > /dev/null 2>&1`);
+            core.info(`unzip: tar -xvf ${lazDownloadPath} -C ${workspace}`);
+            await exec(`tar -xvf ${lazDownloadPath} -C ${workspace}`);
         } catch (error) {
             throw (error as Error);
         }
@@ -443,8 +443,8 @@ export class Lazarus {
                 core.info(`Download fpc - Downloaded into ${fpcDownloadPath}`);
             }
             // 解压fpc
-            core.info(`unzip: tar -xvf ${fpcDownloadPath} -C ${lazarusPath} > /dev/null 2>&1`);
-            await exec(`tar -xvf ${fpcDownloadPath} -C ${lazarusPath} > /dev/null 2>&1`);
+            core.info(`unzip: tar -xvf ${fpcDownloadPath} -C ${lazarusPath}`);
+            await exec(`tar -xvf ${fpcDownloadPath} -C ${lazarusPath}`);
         } catch (error) {
             throw (error as Error);
         }
@@ -461,8 +461,8 @@ export class Lazarus {
                 core.info(`Download fpcrc - Downloaded into ${fpcsrcDownloadPath}`);
             }
             // 解压fpcsrc
-            core.info(`unzip: tar -xvf ${fpcsrcDownloadPath} -C ${lazarusPath} > /dev/null 2>&1`);
-            await exec(`tar -xvf ${fpcsrcDownloadPath} -C ${lazarusPath} > /dev/null 2>&1`);
+            core.info(`unzip: tar -xvf ${fpcsrcDownloadPath} -C ${lazarusPath}`);
+            await exec(`tar -xvf ${fpcsrcDownloadPath} -C ${lazarusPath}`);
         } catch (error) {
             throw (error as Error);
         }
