@@ -23,7 +23,7 @@ inputs:
     required: false
     default: 'x64'
   source-install:
-    description: 'Install using source code. For Linux'
+    description: 'Install using source code. For Linux, Install Root Path: $RUNNER_WORKSPACE/lazarus'
     required: false
     default: false
 

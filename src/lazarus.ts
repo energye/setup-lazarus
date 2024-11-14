@@ -150,7 +150,7 @@ export class Lazarus {
                 // Perform a repository update
                 await exec("sudo apt update");
                 // linux arm64 和 linux x64 使用源码安装时
-                if (this._Arch == 'arm64' || this._SourceInstall) {
+                if (this._SourceInstall) {
                     await this.sourceInstallLinux(cacheRestored)
                     break
                 }
@@ -382,12 +382,10 @@ export class Lazarus {
             // fpcName: fpc-3.2.2.%s-linux.tar
             // aarch64 | x86_64
             let tempArch = arch;
-            if (tempArch == "x64") {
+            if (arch == 'x64') {
                 tempArch = "x86_64"
-            } else if (tempArch == "arm64") {
-                tempArch = "aarch64"
             }
-            fpcName = fpcName.replace("%s", tempArch);
+            fpcName = fpcName.replace("{arch}", tempArch);
             return fpcName
         }
         let source = versions['source']
@@ -484,6 +482,7 @@ export class Lazarus {
         //     throw (error as Error);
         // }
     }
+
     // 删除要求用户输入的部分
     private removeReadInput(path: string) {
         let data = fs.readFileSync(path, 'utf8');

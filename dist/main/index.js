@@ -346,7 +346,7 @@ class Lazarus {
                 // Perform a repository update
                 await (0, exec_1.exec)("sudo apt update");
                 // linux arm64 和 linux x64 使用源码安装时
-                if (this._Arch == 'arm64' || this._SourceInstall) {
+                if (this._SourceInstall) {
                     await this.sourceInstallLinux(cacheRestored);
                     break;
                 }
@@ -579,13 +579,10 @@ class Lazarus {
             // fpcName: fpc-3.2.2.%s-linux.tar
             // aarch64 | x86_64
             let tempArch = arch;
-            if (tempArch == "x64") {
+            if (arch == 'x64') {
                 tempArch = "x86_64";
             }
-            else if (tempArch == "arm64") {
-                tempArch = "aarch64";
-            }
-            fpcName = fpcName.replace("%s", tempArch);
+            fpcName = fpcName.replace("{arch}", tempArch);
             return fpcName;
         };
         let source = version_1.versions['source'];
@@ -664,22 +661,22 @@ class Lazarus {
         catch (error) {
             throw error;
         }
-        core.info(`Run Install fpc & Lazarus`);
-        try {
-            core.info(`Run Install: apt-get install dependent`);
-            await (0, exec_1.exec)("sudo apt-get update -q -y");
-            await (0, exec_1.exec)("sudo apt-get install -q -y git");
-            await (0, exec_1.exec)("sudo apt-get install -q -y make binutils build-essential gdb subversion zip unzip libx11-dev libgtk2.0-dev libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev libgtk-3-dev");
-            // let fpcDirname = path.basename(fpcFilename, path.extname(fpcFilename));
-            // core.info(`Run Install fpc: ${lazarusPath}/${fpcDirname}`);
-            // await exec(`echo y | ./install.sh`, [], {cwd: `${lazarusPath}/${fpcDirname}`});
-            //
-            // core.info(`Run Install lazarus: ${lazarusPath}`);
-            // await exec(`make clean all`, [], {cwd: lazarusPath});
-        }
-        catch (error) {
-            throw error;
-        }
+        // core.info(`Run Install fpc & Lazarus`);
+        // try {
+        //     core.info(`Run Install: apt-get install dependent`);
+        //     await exec("sudo apt-get update -q -y");
+        //     await exec("sudo apt-get install -q -y git");
+        //     await exec("sudo apt-get install -q -y make binutils build-essential gdb subversion zip unzip libx11-dev libgtk2.0-dev libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev libgtk-3-dev");
+        //
+        //     // let fpcDirname = path.basename(fpcFilename, path.extname(fpcFilename));
+        //     // core.info(`Run Install fpc: ${lazarusPath}/${fpcDirname}`);
+        //     // await exec(`echo y | ./install.sh`, [], {cwd: `${lazarusPath}/${fpcDirname}`});
+        //     //
+        //     // core.info(`Run Install lazarus: ${lazarusPath}`);
+        //     // await exec(`make clean all`, [], {cwd: lazarusPath});
+        // } catch (error) {
+        //     throw (error as Error);
+        // }
     }
     // 删除要求用户输入的部分
     removeReadInput(path) {
@@ -1118,43 +1115,43 @@ exports.versions = {
         "3.6": {
             "fpcversion": "3.2.2",
             "laz": "lazarus-3.6-0.tar.gz",
-            "fpc": "fpc-3.2.2.%s-linux.tar",
+            "fpc": "fpc-3.2.2.{arch}-linux.tar",
             "fpcsrc": "fpc-3.2.2.source.tar.gz"
         },
         "3.4": {
             "fpcversion": "3.2.2",
             "laz": "lazarus-3.4-0.tar.gz",
-            "fpc": "fpc-3.2.2.%s-linux.tar",
+            "fpc": "fpc-3.2.2.{arch}-linux.tar",
             "fpcsrc": "fpc-3.2.2.source.tar.gz"
         },
         "3.2": {
             "fpcversion": "3.2.2",
             "laz": "lazarus-3.2-0.tar.gz",
-            "fpc": "fpc-3.2.2.%s-linux.tar",
+            "fpc": "fpc-3.2.2.{arch}-linux.tar",
             "fpcsrc": "fpc-3.2.2.source.tar.gz"
         },
         "3.0": {
             "fpcversion": "3.2.2",
             "laz": "lazarus-3.0-0.tar.gz",
-            "fpc": "fpc-3.2.2.%s-linux.tar",
+            "fpc": "fpc-3.2.2.{arch}-linux.tar",
             "fpcsrc": "fpc-3.2.2.source.tar.gz"
         },
         "2.2.6": {
             "fpcversion": "3.2.2",
             "laz": "lazarus-2.2.6-0.tar.gz",
-            "fpc": "fpc-3.2.2.%s-linux.tar",
+            "fpc": "fpc-3.2.2.{arch}-linux.tar",
             "fpcsrc": "fpc-3.2.2.source.tar.gz"
         },
         "2.2.4": {
             "fpcversion": "3.2.2",
             "laz": "lazarus-2.2.4-0.tar.gz",
-            "fpc": "fpc-3.2.2.%s-linux.tar",
+            "fpc": "fpc-3.2.2.{arch}-linux.tar",
             "fpcsrc": "fpc-3.2.2.source.tar.gz"
         },
         "2.2.2": {
             "fpcversion": "3.2.2",
             "laz": "lazarus-2.2.2-0.tar.gz",
-            "fpc": "fpc-3.2.2.%s-linux.tar",
+            "fpc": "fpc-3.2.2.{arch}-linux.tar",
             "fpcsrc": "fpc-3.2.2.source.tar.gz"
         }
     },

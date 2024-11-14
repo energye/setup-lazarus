@@ -95,43 +95,43 @@ export const versions = {
         "3.6": {
             "fpcversion": "3.2.2",
             "laz": "lazarus-3.6-0.tar.gz",
-            "fpc": "fpc-3.2.2.%s-linux.tar",
+            "fpc": "fpc-3.2.2.{arch}-linux.tar",
             "fpcsrc": "fpc-3.2.2.source.tar.gz"
         },
         "3.4": {
             "fpcversion": "3.2.2",
             "laz": "lazarus-3.4-0.tar.gz",
-            "fpc": "fpc-3.2.2.%s-linux.tar",
+            "fpc": "fpc-3.2.2.{arch}-linux.tar",
             "fpcsrc": "fpc-3.2.2.source.tar.gz"
         },
         "3.2": {
             "fpcversion": "3.2.2",
             "laz": "lazarus-3.2-0.tar.gz",
-            "fpc": "fpc-3.2.2.%s-linux.tar",
+            "fpc": "fpc-3.2.2.{arch}-linux.tar",
             "fpcsrc": "fpc-3.2.2.source.tar.gz"
         },
         "3.0": {
             "fpcversion": "3.2.2",
             "laz": "lazarus-3.0-0.tar.gz",
-            "fpc": "fpc-3.2.2.%s-linux.tar",
+            "fpc": "fpc-3.2.2.{arch}-linux.tar",
             "fpcsrc": "fpc-3.2.2.source.tar.gz"
         },
         "2.2.6": {
             "fpcversion": "3.2.2",
             "laz": "lazarus-2.2.6-0.tar.gz",
-            "fpc": "fpc-3.2.2.%s-linux.tar",
+            "fpc": "fpc-3.2.2.{arch}-linux.tar",
             "fpcsrc": "fpc-3.2.2.source.tar.gz"
         },
         "2.2.4": {
             "fpcversion": "3.2.2",
             "laz": "lazarus-2.2.4-0.tar.gz",
-            "fpc": "fpc-3.2.2.%s-linux.tar",
+            "fpc": "fpc-3.2.2.{arch}-linux.tar",
             "fpcsrc": "fpc-3.2.2.source.tar.gz"
         },
         "2.2.2": {
             "fpcversion": "3.2.2",
             "laz": "lazarus-2.2.2-0.tar.gz",
-            "fpc": "fpc-3.2.2.%s-linux.tar",
+            "fpc": "fpc-3.2.2.{arch}-linux.tar",
             "fpcsrc": "fpc-3.2.2.source.tar.gz"
         }
     },
