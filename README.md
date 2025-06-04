@@ -4,9 +4,9 @@
 
 Originating from [setup-lazarus](https://github.com/gcarreno/setup-lazarus)
 
-Added Linux aarch64 architecture
+添加 Linux 从源码安装 arm arm64 架构
 
-Set up your GitHub Actions workflow with a specific version of Lazarus
+在 GitHub Actions workflow 安装指定版本和架构的 Lazarus
 
 ## Inputs
 
@@ -14,12 +14,11 @@ Set up your GitHub Actions workflow with a specific version of Lazarus
 
 **REQUIRED** Lazarus version.
 
-**DEFAULT** stable.
-
 Possible values:
 
 | Lazarus Version | FPC Version | Description   |
 |-----------------|-------------|---------------|
+| 4.0             | 3.2.2       |               |
 | 3.8             | 3.2.2       |               |
 | 3.6             | 3.2.2       |               |
 | 3.2             | 3.2.2       |               |
@@ -59,12 +58,12 @@ This is a boolean input and will use cache if set to `true`.
 At the moment this action only supports:
 
 - Windows (platform=win32, arch=x64)
-- Linux (platform=linux, arch=x64, aarch64)
+- Linux (platform=linux, arch=amd64, i386, arm32v7, arm64v8, os-arch=arm, aarch64)
 - macOS (platform=darwin, arch=x64)
 
 ### IMPORTANT
-- Minimum version only supports 2.2.2
-- Until further notice only Cocoa widgset is supported on macOS runners.
+- 最小版本支持 2.2.2
+- MacOS仅支持Cocoa
 - Linux ARM64 run-on-architecture build
 
 ## Example usage
@@ -101,12 +100,12 @@ jobs:
     strategy:
       matrix:
         operating-system: [windows-latest,ubuntu-latest,macos-latest]
-        lazarus-versions: [dist, stable, 2.2.4, 2.2.2]
+        lazarus-versions: [2.2.4, 2.2.2]
     steps:
     - name: Checkout source code
       uses: actions/checkout@v3
     - name: Install Lazarus
-      uses: sxmxta/lazarus@v1
+      uses: energye/setup-lazarus@v1.0.0
       with:
         lazarus-version: ${{ matrix.lazarus-versions }}
         include-packages: "Synapse 40.1"
