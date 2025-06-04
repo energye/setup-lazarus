@@ -20,8 +20,7 @@ Possible values:
 
 | Lazarus Version | FPC Version | Description   |
 |-----------------|-------------|---------------|
-| dist            |             | Latest stable |
-| stable          |             | Lazarus 3.6   |
+| 3.8             | 3.2.2       |               |
 | 3.6             | 3.2.2       |               |
 | 3.2             | 3.2.2       |               |
 | 3.4             | 3.2.2       |               |
