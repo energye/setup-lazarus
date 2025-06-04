@@ -74,7 +74,7 @@ export const versions = {
                 "laz": "lazarus-darwin-aarch64-4.0.zip",
                 "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
             },
-            "x86-64":{
+            "x86_64":{
                 "laz": "lazarus-darwin-x86_64-4.0.zip",
                 "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
             }
@@ -84,7 +84,7 @@ export const versions = {
                 "laz": "lazarus-darwin-aarch64-3.8.zip",
                 "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
             },
-            "x86-64":{
+            "x86_64":{
                 "laz": "lazarus-darwin-x86_64-3.8.zip",
                 "fpc": "fpc-3.2.2.intelarm64-macosx.dmg",
             }
