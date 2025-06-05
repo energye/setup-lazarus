@@ -58,21 +58,15 @@ export class Cache {
         const dir = process.env["SAVE_CACHE_DIR"] || "";
 
         if (key && dir) {
-            core.info(
-                `Cache.save -- Saving cache with Key: ${key}, Directory: ${dir}`
-            );
+            core.info(`Cache.save -- Saving cache with Key: ${key}, Directory: ${dir}`);
             try {
                 await cache.saveCache([dir], key);
                 core.info("Cache.save -- Cache saved successfully.");
             } catch (error) {
-                core.warning(
-                    `Cache.save -- Failed to save cache: ${(error as Error).message}`
-                );
+                core.warning(`Cache.save -- Failed to save cache: ${(error as Error).message}`);
             }
         } else {
-            core.info(
-                "Cache.save -- No cache key or directory specified, skipping cache save."
-            );
+            core.info("Cache.save -- No cache key or directory specified, skipping cache save.");
         }
     }
 }

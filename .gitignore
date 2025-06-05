@@ -1,6 +1,7 @@
 # Project specific
 node_modules/
 lib
+temp
 
 # Rest of the file pulled from https://github.com/github/gitignore/blob/master/Node.gitignore
 # Logs
