@@ -1,10 +1,11 @@
 {
   "name": "setup-lazarus",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "Set up your GitHub Actions workflow with a specific version of Lazarus",
   "main": "lib/main.js",
   "scripts": {
-    "build": "tsc && ncc build -o dist/main lib/main.js && ncc build -o dist/post lib/post.js"
+    "build": "tsc && ncc build -o dist/main lib/main.js && ncc build -o dist/post lib/post.js",
+    "dev": "ts-node src/main.ts"
   },
   "repository": {
     "type": "git",
