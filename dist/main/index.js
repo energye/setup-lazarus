@@ -371,8 +371,8 @@ class Lazarus {
                 }
                 break;
             case "darwin":
-                // MacOS 从 3.8 版本开始分别提供了 arm64和amd64安装包
                 core.info(`MacOS ${this._Arch}`);
+                // MacOS 从 3.8 版本开始分别提供了 arm64 和 amd64 安装包
                 if (this._isSplitArchPkg()) {
                     core.info(`MacOS Use New Install`);
                     await this.macOSNewInstall(cacheRestored);
@@ -821,10 +821,11 @@ const path = __importStar(__nccwpck_require__(6928));
 const fs = __importStar(__nccwpck_require__(9896));
 async function run() {
     try {
-        const env = process.env["env"] || "";
-        if (env == "dev") {
-            core.info("local dev mode");
-            // 本地开发模式需要设置一些默认参数
+        // 运行模式, local: 本地
+        const runMode = process.env["env"] || "";
+        if (runMode == "local") {
+            core.info("local mode");
+            // 本地模式需要设置一些默认参数
             const currentDirectory = process.cwd();
             core.info(`current dir: ${currentDirectory}`);
             const tempDir = path.join(currentDirectory, "temp");
@@ -849,9 +850,9 @@ async function run() {
         let includePackages = core.getInput('include-packages');
         // `with-cache` input defined in action metadata file
         let withCache = Boolean(core.getInput('with-cache'));
-        // 'os-arch' Installing 32-bit(i386) Lazarus on Windows 64
+        // 'os-arch' 指定架构
         let osArch = core.getInput('os-arch') || 'i386'; // all:x64, windows:i386, linux:arm64
-        // 'source-install' Install using source code
+        // 'source-install' 从源码安装, 当前仅支持 Linux
         let sourceInstall = Boolean(core.getInput('source-install'));
         if (includePackages) {
             includePackagesArray = includePackages.split(',');

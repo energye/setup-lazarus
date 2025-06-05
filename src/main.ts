@@ -5,10 +5,11 @@ import * as fs from "fs";
 
 async function run(): Promise<void> {
     try {
-        const env = process.env["env"] || "";
-        if (env == "dev") {
-            core.info("local dev mode");
-            // 本地开发模式需要设置一些默认参数
+        // 运行模式, local: 本地
+        const runMode = process.env["env"] || "";
+        if (runMode == "local") {
+            core.info("local mode");
+            // 本地模式需要设置一些默认参数
             const currentDirectory = process.cwd();
             core.info(`current dir: ${currentDirectory}`);
             const tempDir = path.join(currentDirectory, "temp");
@@ -40,10 +41,10 @@ async function run(): Promise<void> {
         // `with-cache` input defined in action metadata file
         let withCache = Boolean(core.getInput('with-cache'));
 
-        // 'os-arch' Installing 32-bit(i386) Lazarus on Windows 64
+        // 'os-arch' 指定架构
         let osArch = core.getInput('os-arch') || 'i386'; // all:x64, windows:i386, linux:arm64
 
-        // 'source-install' Install using source code
+        // 'source-install' 从源码安装, 当前仅支持 Linux
         let sourceInstall = Boolean(core.getInput('source-install'));
 
         if (includePackages) {

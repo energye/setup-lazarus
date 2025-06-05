@@ -175,8 +175,8 @@ export class Lazarus {
                 }
                 break;
             case "darwin":
-                // MacOS 从 3.8 版本开始分别提供了 arm64和amd64安装包
                 core.info(`MacOS ${this._Arch}`);
+                // MacOS 从 3.8 版本开始分别提供了 arm64 和 amd64 安装包
                 if (this._isSplitArchPkg()) {
                     core.info(`MacOS Use New Install`);
                     await this.macOSNewInstall(cacheRestored)
