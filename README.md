@@ -8,8 +8,6 @@ Originating from [setup-lazarus](https://github.com/gcarreno/setup-lazarus)
 
 在 GitHub Actions workflow 安装指定版本和架构的 Lazarus
 
-## Inputs
-
 ### lazarus-version
 
 **REQUIRED** Lazarus version.
@@ -53,20 +51,20 @@ This is a boolean input and will use cache if set to `true`.
 > Caching is now off ny default for Windows until I can solve this issue!
 
 
-## Platforms
+## 平台架构
 
-At the moment this action only supports:
+支持操作系统
 
-- Windows (platform=win32, arch=x64)
-- Linux (platform=linux, arch=amd64, i386, arm32v7, arm64v8, os-arch=arm, aarch64)
-- macOS (platform=darwin, arch=x64)
+- Windows (platform=win32, arch=i386, x64)
+- Linux (platform=linux, arch=i386, amd64, arm32v7, arm64v8)
+- macOS (platform=darwin, arch=x64, arm64)
 
 ### IMPORTANT
 - 最小版本支持 2.2.2
-- MacOS仅支持Cocoa
+- MacOS 仅支持 Cocoa
 - Linux ARM64 run-on-architecture build
 
-## Example usage
+## 示例 1
 
 ```yaml
 steps:
@@ -80,7 +78,7 @@ steps:
 - run: YourTestProject
 ```
 
-## Matrix example usage
+## 示例 2
 
 ```yaml
 name: build
@@ -121,3 +119,13 @@ jobs:
     - name: Run the Unit Tests Application
       run: bin/testconsoleapplication "--all" "--format=plain"
 ```
+
+## 本地运行
+
+1. 安装 `nodejs 20` 版本
+2. 使用 `npm` 安装 ts-node `npm install -g ts-node`
+3. 在环境变量配置 `mode`(运行模式)
+   - `mode=local`
+   - 其它环境变量参数 
+   `LAZARUS-VERSION=3.6` `OS-ARCH=x64`
+4. 运行 `npm run dev`

@@ -6,7 +6,7 @@ import * as fs from "fs";
 async function run(): Promise<void> {
     try {
         // 运行模式, local: 本地
-        const runMode = process.env["env"] || "";
+        const runMode = process.env["mode"] || "";
         if (runMode == "local") {
             core.info("local mode");
             // 本地模式需要设置一些默认参数
