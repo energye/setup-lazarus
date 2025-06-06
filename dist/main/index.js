@@ -450,6 +450,7 @@ class Lazarus {
             // 命令 sudo ln -s /Applications/Lazarus/lazbuild /usr/local/bin/lazbuild
             await (0, exec_1.exec)(`sudo ln -s /Applications/lazarus/lazbuild /usr/local/bin/lazbuild`);
             // sudo ln -s /Applications/Lazarus.app/Contents/MacOS /Developer/lazarus
+            await (0, exec_1.exec)(`sudo mkdir -p /Developer/lazarus`);
             await (0, exec_1.exec)(`sudo ln -s /Applications/Lazarus /Developer/lazarus`);
         }
         catch (error) {
@@ -824,7 +825,7 @@ const fs = __importStar(__nccwpck_require__(9896));
 async function run() {
     try {
         // 运行模式, local: 本地
-        const runMode = process.env["env"] || "";
+        const runMode = process.env["mode"] || "";
         if (runMode == "local") {
             core.info("local mode");
             // 本地模式需要设置一些默认参数
