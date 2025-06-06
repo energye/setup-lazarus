@@ -257,9 +257,6 @@ export class Lazarus {
 
             // 命令 sudo ln -s /Applications/Lazarus/lazbuild /usr/local/bin/lazbuild
             await exec(`sudo ln -s /Applications/lazarus/lazbuild /usr/local/bin/lazbuild`);
-            // sudo ln -s /Applications/Lazarus.app/Contents/MacOS /Developer/lazarus
-            await exec(`sudo mkdir -p /Developer/lazarus`);
-            await exec(`sudo ln -s /Applications/Lazarus /Developer/lazarus`);
         } catch (error) {
             throw (error as Error);
         }
