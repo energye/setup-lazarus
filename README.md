@@ -4,7 +4,7 @@
 
 Originating from [setup-lazarus](https://github.com/gcarreno/setup-lazarus)
 
-添加 Linux 从源码安装 arm arm64 架构
+添加 Linux 从源码安装 arm32v7, arm64v8
 
 在 GitHub Actions workflow 安装指定版本和架构的 Lazarus
 
@@ -57,7 +57,7 @@ This is a boolean input and will use cache if set to `true`.
 
 - Windows (platform=win32, arch=i386, x64)
 - Linux (platform=linux, arch=i386, amd64, arm32v7, arm64v8)
-- macOS (platform=darwin, arch=x64, arm64)
+- macOS (platform=darwin, arch=x64, aarch64)
 
 ### IMPORTANT
 - 最小版本支持 2.2.2
